@@ -1,0 +1,19 @@
+---
+layout: post
+title:  "Be Strict With Your API Contracts"
+date:   2018-05-04 12:59:49 -0400
+categories: blog 
+---
+"It seems like a problem when an entire screen is in error because a field is missing," a colleague recently said to me. He wanted to know why we couldn't just deal with or ignore a seemingly innocuous piece of missing data in one of our APIs. In his opinion, being strict with our APIs and failing when the data didn't meet the contract was harming us, and not helping. As someone who fights for graceful degradation whenever possible, I sympathized. It's disappointing to provide a poor user experience when we could be doing better. But there's good reason for being strict with your API contracts. It protects you from trying to operate your app in unknown states, which can lead to subsequent poor experiences, and even to risky behavior when your app tries to operate in an unknown state.
+
+In this particular case, the missing field was critical to displaying one of the subsequent screens properly. It provided an enumeration which would be used to determine what copy and options the user should see if they chose to dive down to see more details about their device. Given that it was critical to determining screen behavior, and with no gracefully degraded behavior provided by the product team, I couldn't in good conscience say "sure, we'll handle it."
+
+It's not that apps are incapable of dealing with missing data, and it's not even hard to do so. The problem is that it's a little too easy - and that also makes it easy to be careless. It would be simple as a developer with loose API definitions to say "sure, we'll re-enable the screen despite the bad data", probably by throwing in a quick null check. But doing so exposes you to risk across your entire app. That missing field could cause a confusing experience, or cause subsequent API calls to be made incorrectly.
+
+This is the biggest reason to push back and demand strict adherence to your API contracts. If you build your models for data to be strict, you'll fail early when your apps end up in an unexpected state. Users will be inconvenienced, but you won't make any incorrect calls, and you won't display anything confusing. Instead, you'll do two things:
+
+First, you'll sit down with your product and design team, and talk about the ramifications of the missing/incorrect data. If you built your app to have strict expectations for the APIs, you'll be able to highlight all the flows and screens affected by the missing data, and that will let you determine the real scope of the problem - is it just one label on one screen? Does it affect large components on multiple screens? Does it change what data you send to a critical API? This will guide your decision on whether or not it makes sense to accept a change to loosen that data field in your API contract. Do you want to (or can you even) take on the days or weeks of work you uncover?
+
+Second, you'll be able to take that data to your API team and discuss the missing data with information on what the impact is. It's one thing to approach your API team and say "hey, this field is missing, can you fix that?" It's another to approach the API team and say "this field is missing, and incorporating that change into our app is going to take two hours/days/sprints/months, can you help us by fixing it?" Now they can prioritize the work, or change the contract accordingly, knowing the impact on their clients.
+
+In short, being strict with an API isn't just a convenience for the developers. It's for the convenience of the whole team. Being strict with your API makes it simple to guide your product, design, and API teams when data failures occur. You can be loose, and hope you understand the scope of problems as they crop up; or you can be strict, and have informed conversations about the scope of the issue when your API isn't returning the data you expect.
